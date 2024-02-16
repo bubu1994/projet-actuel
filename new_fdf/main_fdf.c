@@ -3,20 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   main_fdf.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gentian <gentian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 14:24:20 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/02/09 15:30:05 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/02/16 01:07:14 by gentian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+void	print_data(t_data mlx)
+{
+	printf("x_ext: %d, y_ext: %d,zoom: %d, xinit: %d, yinit: %d, alt_scale: %f\n",
+	mlx.axes.x_extrem, mlx.axes.y_extrem, mlx.zoom, mlx.x_pos, mlx.y_pos, mlx.alt_scale);
+}
+
 int	display_keypress(int key, t_data *mlx)
 {
 	(void)mlx;
 	printf("%d\n", key);
-	if (key == ESC_K)
+	if (key == ESC_K || key == ESC_LINUX)
 		exit(0);
 	return (0);
 }
@@ -38,13 +44,16 @@ int	main(int argc, char **argv)
 {
 	t_data	mlx;
 
-	(void) argc;
+	if (argc != 2)
+		return (0);
 	mlx.ptr = mlx_init();
 	mlx_initialise(&mlx);
-	(void) argv;
 	mlx.axes = get_width_height(argv[1]);
 	mlx.points = array_of_points(argv[1], mlx.axes);
+	init_env(&mlx);
 	
+	print_data(mlx);
+
 	draw_the_map(mlx);
 	free_3d(mlx.points);
 	mlx_put_image_to_window(mlx.ptr, mlx.win, mlx.img.img_ptr, 0, 0);

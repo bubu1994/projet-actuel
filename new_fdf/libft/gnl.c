@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnl.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gentian <gentian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:56:59 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/02/09 10:09:56 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/02/10 18:00:13 by gentian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ char	*get_next_line(int fd)
 	char		*line;
 	static char	*str;
 
-	if (fd < 0 | BUFFER_SIZE < 1 | read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
 	{
 		free(str);
 		str = NULL;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   colors_tab.c                                       :+:      :+:    :+:   */
+/*   pull_color.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gentian <gentian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 12:39:05 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/02/09 13:57:12 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/02/12 10:51:45 by gentian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,3 +69,26 @@ unsigned int	hexastr_to_int(char *s)
 	}
 	return (res);
 }
+
+unsigned int	pull_color(char	*s)
+{
+	unsigned int	color;
+
+	color = COLOR_DEFAULT;
+	if (comma_is_in(s))
+		color = hexastr_to_int(s + comma_pos(s) + 1);
+	return (color);
+}
+
+/* 
+int	main(int argc, char **argv)
+{
+	t_axes axes = get_width_height(argv[1]);
+	char ***tab = array_of_points(argv[1], axes);
+	int x = 1;
+	int y = 1;
+
+	printf("%d\n", pull_color(tab[y][x]));
+	free_3d(tab);
+	return (0);
+} */

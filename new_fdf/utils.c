@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gentian <gentian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 09:53:48 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/02/09 14:53:48 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/02/15 15:28:39 by gentian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,4 +113,22 @@ char	***array_of_points(char *file, t_axes axes)
 	res[i] = NULL;
 	close(fd);
 	return (res);
+}
+
+unsigned int	degrade_color(unsigned int a, unsigned int b, int i, int steps)
+{
+	t_color	dif;
+	t_color	new;
+	float	ratio;
+
+	ratio = (float)i / (float)steps;
+	dif.r = ((a >> 24) & 0xFF) - ((b >> 24) & 0xFF);
+	dif.g = ((a >> 16) & 0xFF) - ((b >> 16) & 0xFF);
+	dif.b = ((a >> 8) & 0xFF) - ((b >> 8) & 0xFF);
+	dif.a = (a & 0xFF) - (b & 0xFF);
+	new.r = ((a >> 24) & 0xFF) - (dif.r * ratio);
+	new.g = ((a >> 16) & 0xFF) - (dif.g * ratio);
+	new.b = ((a >> 8) & 0xFF) - (dif.b * ratio);
+	new.a = (a & 0xFF) - dif.a * ratio;
+	return ((new.r << 24) | (new.g << 16) | (new.b << 8) | new.a);
 }

@@ -6,7 +6,7 @@
 #    By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/25 12:01:57 by gebuqaj           #+#    #+#              #
-#    Updated: 2024/02/07 17:49:50 by gebuqaj          ###   ########.fr        #
+#    Updated: 2024/02/16 13:55:52 by gebuqaj          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ CC 		= gcc
 
 CFLAGS 	= -Wall -Wextra -Werror
 
-.c.o:
+%.o:	%.c
 			${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 ${NAME}:	${OBJS}

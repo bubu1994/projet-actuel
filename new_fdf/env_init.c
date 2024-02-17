@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gentian <gentian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 10:53:29 by gentian           #+#    #+#             */
-/*   Updated: 2024/02/16 01:07:07 by gentian          ###   ########.fr       */
+/*   Updated: 2024/02/17 10:21:47 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ float	scale_alt(char ***tab)
 	float	scale;
 
 	y = 0;
-	max_z = 0;
+	max_z = 1;
 	scale = 1;
 	while (tab[y])
 	{
@@ -35,14 +35,14 @@ float	scale_alt(char ***tab)
 		}
 		y++;
 	}
-	scale = HEIGHT / 5.0 / max_z;
+	scale = HEIGHT / 4.0 / max_z;
 	return (scale);
 }
 
 void    init_zoom(t_data *mlx)
 {
-	int	x_zoom;
-	int	y_zoom;
+	float	x_zoom;
+	float	y_zoom;
 
 	x_zoom = (WIDTH - 2 * GAP_W) / mlx->axes.x_extrem;
 	y_zoom = (HEIGHT - 2 * GAP_H) / mlx->axes.y_extrem;
@@ -74,8 +74,10 @@ int	get_yinit(t_data mlx)
 
 void	init_env(t_data *mlx)
 {
+	mlx->alpha = 2 * M_PI;
+	mlx->beta = M_PI / 2;
 	init_zoom(mlx);
-	mlx->alt_scale = scale_alt(mlx->points);
+	mlx->alt_scale = 1;
 	mlx->x_pos = get_xinit(*mlx);
 	mlx->y_pos = get_yinit(*mlx);
 }

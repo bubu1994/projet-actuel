@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pull_color.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gentian <gentian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 12:39:05 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/02/12 10:51:45 by gentian          ###   ########.fr       */
+/*   Updated: 2024/02/16 14:40:57 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	hexachar_to_digit(char c)
 	else if (c >= 'a' && c <= 'f')
 		return (c - 'a' + 10);
 	else
-		return -1;
+		return (-1);
 }
 
 unsigned int	hexastr_to_int(char *s)
@@ -56,12 +56,12 @@ unsigned int	hexastr_to_int(char *s)
 	res = 0;
 	if (s[0] == '0' && (s[1] == 'x' || s[1] == 'X'))
 		s = s + 2;
-	while (*s)
+	while (*s && *s != '\n')
 	{
 		digit = hexachar_to_digit(*s);
 		if (digit == -1)
 		{
-			perror("Invalid color");
+			perror("Couleur invalide");
 			exit(1);
 		}
 		res = res * 16 + digit;

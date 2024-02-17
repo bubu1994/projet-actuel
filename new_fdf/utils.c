@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gentian <gentian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 09:53:48 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/02/15 15:28:39 by gentian          ###   ########.fr       */
+/*   Updated: 2024/02/16 16:49:39 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	fd_open_error(int fd)
 {
 	if (fd == -1)
 	{
-		perror("Erreur ouverture fichier");
+		perror("Erreur fichier");
 		exit(1);
 	}
 	return ;
@@ -73,7 +73,7 @@ t_axes	get_width_height(char *file)
 	fd = open(file, O_RDONLY);
 	fd_open_error(fd);
 	line = get_next_line(fd);
-	tab = ft_split(line, ' ');
+	tab = ft_super_split(line, " \n");
 	res.x_extrem = size_tableau(tab);
 	free_tableau(tab);
 	y = 0;
@@ -82,6 +82,18 @@ t_axes	get_width_height(char *file)
 		y++;
 		free(line);
 		line = get_next_line(fd);
+		if (line == NULL)
+			break ;
+		tab = ft_super_split(line, " \n");
+		res.temp_x = size_tableau(tab);
+		if (res.temp_x != res.x_extrem)
+		{
+			perror("Erreur fichier");
+			close(fd);
+			free(line);
+			exit(1);
+		}
+		free_tableau(tab);
 	}
 	res.y_extrem = y;
 	close(fd);
@@ -106,7 +118,7 @@ char	***array_of_points(char *file, t_axes axes)
 		line = get_next_line(fd);
 		if (line == NULL)
 			break ;
-		res[i] = ft_split(line, ' ');
+		res[i] = ft_super_split(line, " \n");
 		free(line);
 		i++;
 	}
@@ -115,7 +127,7 @@ char	***array_of_points(char *file, t_axes axes)
 	return (res);
 }
 
-unsigned int	degrade_color(unsigned int a, unsigned int b, int i, int steps)
+uint32_t	degrade_color(int a, int b, int i, int steps)
 {
 	t_color	dif;
 	t_color	new;

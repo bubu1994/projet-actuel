@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 14:28:57 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/02/17 10:36:31 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/02/20 14:33:51 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ int	x_tr(int x, int y, t_data mlx)
 {
 	int	x_prim;
 	int	y_prim;
-	
+
 	x_prim = x * mlx.zoom;
 	y_prim = y * mlx.zoom;
-	x_prim = (x_prim - y_prim) * cos(mlx.alpha);
+	x_prim = x_prim * cos(mlx.beta) - y_prim * sin(mlx.beta);
 	return (x_prim);
 }
 
@@ -40,7 +40,7 @@ int	y_tr(int y, int x, t_data mlx)
 	z = ft_atoi(mlx.points[y][x]) * mlx.alt_scale * mlx.zoom;
 	x_prim = x * mlx.zoom;
 	y_prim = y * mlx.zoom;
-	y_prim = ((x_prim + y_prim) / 2) * sin(mlx.beta) - z;
+	y_prim = (x_prim * sin(mlx.beta) + y_prim * cos(mlx.beta)) * cos(mlx.alpha) - z * sin(mlx.alpha);
 	return (y_prim);
 }
 
@@ -63,7 +63,7 @@ void	draw_one_line(t_point a, t_point b, t_data mlx)
 	while (i <= steps)
 	{
 		put_my_pixel(&mlx.img, (int)x + mlx.x_pos, (int)y + mlx.y_pos,
-		degrade_color(pull_color(mlx.points[a.y][a.x]), pull_color(mlx.points[b.y][b.x]), i, steps));
+		degrade_color(pull_color(mlx.points[a.y][a.x], mlx), pull_color(mlx.points[b.y][b.x], mlx), i, steps));
 		x += a.i_x;
 		y += a.i_y;
 		i++;
@@ -78,22 +78,20 @@ void	draw_the_map(t_data mlx)
 	int		y;
 
 	y = 0;
-	while (y < mlx.axes.y_extrem)
+	while (y <= mlx.axes.y_extrem)
 	{
 		x = 0;
-		while (x < mlx.axes.x_extrem)
+		while (x <= mlx.axes.x_extrem)
 		{
 			a.x = x;
 			a.y = y;
-			a.z = ft_atoi(mlx.points[y][x]);
 			b.x = x + 1;
 			b.y = y;
-			b.z = ft_atoi(mlx.points[y][x]);
-			if (x < mlx.axes.x_extrem - 1)
+			if (x < mlx.axes.x_extrem)
 				draw_one_line(a, b, mlx);
 			b.x = x;
 			b.y = y + 1;
-			if (y < mlx.axes.y_extrem - 1)
+			if (y < mlx.axes.y_extrem)
 				draw_one_line(a, b, mlx);
 			x++;
 		}
@@ -134,22 +132,20 @@ void	draw_empty(t_data mlx)
 	int		y;
 
 	y = 0;
-	while (y < mlx.axes.y_extrem)
+	while (y <= mlx.axes.y_extrem)
 	{
 		x = 0;
-		while (x < mlx.axes.x_extrem)
+		while (x <= mlx.axes.x_extrem)
 		{
 			a.x = x;
 			a.y = y;
-			a.z = ft_atoi(mlx.points[y][x]);
 			b.x = x + 1;
 			b.y = y;
-			b.z = ft_atoi(mlx.points[y][x]);
-			if (x < mlx.axes.x_extrem - 1)
+			if (x < mlx.axes.x_extrem)
 				draw_one_black_line(a, b, mlx);
 			b.x = x;
 			b.y = y + 1;
-			if (y < mlx.axes.y_extrem - 1)
+			if (y < mlx.axes.y_extrem)
 				draw_one_black_line(a, b, mlx);
 			x++;
 		}

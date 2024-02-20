@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 12:39:05 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/02/16 14:40:57 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/02/20 14:35:19 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,15 @@ unsigned int	hexastr_to_int(char *s)
 	return (res);
 }
 
-unsigned int	pull_color(char	*s)
+unsigned int	pull_color(char	*s, t_data mlx)
 {
 	unsigned int	color;
 
-	color = COLOR_DEFAULT;
+	color = mlx.color_default;
 	if (comma_is_in(s))
 		color = hexastr_to_int(s + comma_pos(s) + 1);
+	else if (ft_atoi(s) != 0)
+		color = mlx.second_color;
 	return (color);
 }
 

@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 09:53:48 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/02/16 16:49:39 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/02/20 12:37:40 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_axes	get_width_height(char *file)
 	fd_open_error(fd);
 	line = get_next_line(fd);
 	tab = ft_super_split(line, " \n");
-	res.x_extrem = size_tableau(tab);
+	res.x_extrem = size_tableau(tab) - 1;
 	free_tableau(tab);
 	y = 0;
 	while (line != NULL)
@@ -85,7 +85,7 @@ t_axes	get_width_height(char *file)
 		if (line == NULL)
 			break ;
 		tab = ft_super_split(line, " \n");
-		res.temp_x = size_tableau(tab);
+		res.temp_x = size_tableau(tab) - 1;
 		if (res.temp_x != res.x_extrem)
 		{
 			perror("Erreur fichier");
@@ -95,7 +95,7 @@ t_axes	get_width_height(char *file)
 		}
 		free_tableau(tab);
 	}
-	res.y_extrem = y;
+	res.y_extrem = y - 1;
 	close(fd);
 	return (res);
 }

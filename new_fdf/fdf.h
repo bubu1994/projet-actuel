@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 14:28:51 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/02/17 10:12:40 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/02/20 14:55:44 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,29 @@
 
 #define WIDTH 1800.0
 #define HEIGHT 1200.0
-#define GAP_W (WIDTH / 5)
-#define GAP_H (HEIGHT / 5)
+#define GAP_W (WIDTH / 3)
+#define GAP_H (HEIGHT / 3)
 #define GAP_ALT (HEIGHT / 4)
 #define COLOR_DEFAULT 0xFFFFFF
 #define MOVE_A 20
 #define D_ZOOM 1.0
-#define D_ANG 0.1
+#define D_ANG 0.05
 
 #define	ESC_K 53
 #define LEFT_A 123
 #define UP_A 126
 #define RIGHT_A 124
 #define DOWN_A 125
-#define ALPHA_R 12
-#define ALPHA_DR 13
-#define BETA_R 0
-#define BETA_DR 1
+#define W 12
+#define Q 13
+#define S 0
+#define A 1
+#define U 32
+#define J 38
+#define V 9
+#define B 11
+#define N 45
+#define M 46
 
 typedef struct s_img
 {
@@ -79,9 +85,13 @@ typedef struct s_data
 	float	alpha;
 	float	beta;
 	float	zoom;
+	float	delta_zoom;
 	float	alt_scale;
+	float	delta_alt;
 	int		x_pos;
 	int		y_pos;
+	int		color_default;
+	int		second_color;
 	t_axes	axes;
 	t_img	img;
 }	t_data;
@@ -99,7 +109,7 @@ void	draw_one_line(t_point a, t_point b, t_data mlx);
 void	draw_the_map(t_data mlx);
 void	draw_empty(t_data mlx);
 
-unsigned int	pull_color(char	*s);
+unsigned int	pull_color(char	*s, t_data mlx);
 uint32_t	degrade_color(int a, int b, int i, int steps);
 
 int	y_tr(int y, int x, t_data mlx);

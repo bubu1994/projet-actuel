@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 10:37:10 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/02/28 11:36:46 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/02/29 17:06:04 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,41 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <string.h>
+# include <stdbool.h>
+# include <limits.h>
 
-typedef struct s_data
+typedef struct s_data t_data;
+
+typedef struct s_fork
 {
-	int	philo_nb;
-	int	forks_nb;
-	int	die_time;
-	int	eat_time;
-	int	sleep_time;
-	int	must_eaten_times;
-}	t_data;
+	pthread_mutex_t	fork;
+	int				id_fork;
+}	t_fork;
 
 typedef struct t_philo
 {
-	int			id;
 	pthread_t	thread;
+	int			id;
+	long		last_meal_timestamp;
+	bool		full;
+	t_fork		*left_fork;
+	t_fork		*right_fork;
+	t_data		*data;
 }	t_philo;
 
+struct s_data
+{
+	int		philo_nb;
+	int		forks_nb;
+	int		die_time;
+	int		eat_time;
+	int		sleep_time;
+	int		must_eat_times;
+	int		start_timestamp;
+	bool	end_simulaton;
+	t_fork	*forks;
+	t_philo	*philos;
+};
 
 int	ft_atoi(const char *str);
 

@@ -6,17 +6,17 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 10:45:11 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/02/28 11:01:02 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/03/06 10:40:26 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ft_atoi(const char *str)
+long	ft_atol(const char *str)
 {
-	int	i;
-	int	sign;
-	int	nb;
+	int		i;
+	int		sign;
+	long	nb;
 
 	i = 0;
 	nb = 0;
@@ -36,4 +36,18 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	return (nb * sign);
+}
+
+void	destroy_mutexes_and_free(t_data le_diner)
+{
+	int	i;
+
+	i = 0;
+	while (i < le_diner.philo_nb)
+	{
+		pthread_mutex_destroy(&le_diner.forks[i].fork);
+		i++;
+	}
+	free(le_diner.forks);
+	free(le_diner.philos);
 }

@@ -4,7 +4,7 @@ CC =		cc
 
 FLAGS =		-Wall -Werror -Wextra
 
-SRC = 		main_philo.c utils.c
+SRC = 		main_philo.c utils.c check_args.c init.c
 
 OBJ = ${SRC:.c=.o}
 

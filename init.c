@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 10:31:05 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/03/06 11:50:15 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/03/08 14:42:01 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_fork	*init_forks(int	nb_philos)
 		status = pthread_mutex_init(&res[i].fork, NULL);
 		if (status != 0)
 		{
-			printf("Erreur lors de l'initialisation du mutex/fork %d\n", i);
+			printf("Erreur initialisation du mutex/fork %d\n", i);
 			return (NULL);
 		}
 		i++;
@@ -36,7 +36,7 @@ t_fork	*init_forks(int	nb_philos)
 	return (res);
 }
 
-void	give_forks(t_philo *res, t_data diner, int i)
+void	assign_forks(t_philo *res, t_data diner, int i)
 {
 	res[i].first_fork = &diner.forks[i];
 	if (res[i].id == diner.philo_nb)
@@ -67,7 +67,7 @@ t_philo	*init_philos(t_data diner)
 		res[i].id = i + 1;
 		res[i].full = false;
 		res[i].has_eaten_times = 0;
-		give_forks(res, diner, i);
+		assign_forks(res, diner, i);
 		res[i].data = &diner;
 	}
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 10:45:11 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/03/06 10:40:26 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/03/08 14:58:35 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,15 @@ long	ft_atol(const char *str)
 		i++;
 	}
 	return (nb * sign);
+}
+
+size_t	get_time_in_ms(void)
+{
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) == -1)
+		printf("Erreur gettimeofday\n");
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
 void	destroy_mutexes_and_free(t_data le_diner)

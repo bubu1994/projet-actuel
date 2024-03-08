@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 10:37:10 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/03/06 11:49:57 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/03/08 16:46:48 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct t_philo
 	int			id;
 	long		last_meal_timestamp;
 	bool		full;
+	bool		is_dead;
 	int			has_eaten_times;
 	t_fork		*first_fork;
 	t_fork		*second_fork;
@@ -57,6 +58,8 @@ struct s_data
 
 long	ft_atol(const char *str);
 void	destroy_mutexes_and_free(t_data le_diner);
+size_t	get_time_in_ms(void);
+
 
 bool	args_are_ok(char **argv);
 t_data	init_diner(char **argv);

@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 10:36:01 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/03/08 16:04:43 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/03/14 12:56:40 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,56 @@ void	print_data(t_data diner)
 
 /*(takes forks), eats, sleeps, thinks
 repeat*/
-bool	is_not_dying(t_philo *filo)
+size_t	timestp(t_philo *filo)
 {
-	
+	return (get_time_in_milliseconds() - filo->data->start_timestamp);
+}
+
+void	print_action(t_philo *filo, char *s)
+{
+	pthread_mutex_lock(&filo->data->print_lock);
+	printf("%zu %d %s", timestp(filo), filo->id, s);
+	pthread_mutex_unlock(&filo->data->print_lock);
+}
+
+static void	eats(t_philo *filo)
+{
+	pthread_mutex_lock(&filo->first_fork->fork);
+	printf("%zu %d has taken fork %d\n",
+		timestp(filo), filo->id, filo->first_fork->id_fork);
+	pthread_mutex_lock(&filo->second_fork->fork);
+	printf("%zu %d has taken fork %d\n",
+		timestp(filo),filo->id, filo->second_fork->id_fork);
+	printf("%zu %d is eating\n",
+		timestp(filo), filo->id);
+	ft_usleep(filo->data->eat_time);
+	pthread_mutex_lock(&filo->lock);
+	filo->has_eaten_times++;
+	filo->last_meal_timestamp = timestp(filo);
+	if (filo->has_eaten_times == filo->must_eat_times)
+		filo->is_full = true;
+	pthread_mutex_unlock(&filo->lock);
+	pthread_mutex_unlock(&filo->first_fork->fork);
+	pthread_mutex_unlock(&filo->second_fork->fork);
+}
+
+void	sleeps(t_philo *filo)
+{
+	print_action(filo, "is sleeping\n");
+	ft_usleep(filo->data->sleep_time);
+}
+
+void	thinks(t_philo *filo)
+{
+	print_action(filo, "is thinking\n");
 }
 
 void	*routine(void *arg)
 {
-	t_philo *filo;
+	t_philo		*filo;
 
 	filo = (t_philo *)arg;
-	while (is_not_dying(filo))
+	while (1)
 	{
 		eats(filo);
 		sleeps(filo);
@@ -47,15 +86,15 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
-void	start_threads(t_data diner)
+void	dining(t_data diner)
 {
 	int		i;
 	t_philo	*les_philos;
 	int		status;
 
 	les_philos = diner.philos;
-	i = 0;
-	while (i < diner.philo_nb)
+	i = -1;
+	while (++i < diner.philo_nb)
 	{
 		status = pthread_create(&les_philos[i].thread, NULL, routine, (void *)&les_philos[i]);
 		if (status != 0)
@@ -63,10 +102,9 @@ void	start_threads(t_data diner)
 			printf("Erreur creation thread/philo %d\n", i + 1);
 			return ;
 		}
-		i++;
 	}
-	i = 0;
-	while (i < diner.philo_nb)
+	i = -1;
+	while (++i < diner.philo_nb)
 	{
 		status = pthread_join(les_philos[i].thread, NULL);
 		if (status != 0)
@@ -74,7 +112,6 @@ void	start_threads(t_data diner)
 			printf("Erreur attente du thread/philo %d\n", i + 1);
 			return ;
 		}
-		i++;
 	}
 }
 
@@ -89,7 +126,7 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	le_diner = init_diner(argv);
-	start_threads(le_diner);
+	dining(le_diner);
 	destroy_mutexes_and_free(le_diner);
 	return (0);
 }

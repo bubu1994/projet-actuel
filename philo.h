@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 10:37:10 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/03/08 16:46:48 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/03/14 12:56:03 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,14 @@ typedef struct t_philo
 	pthread_t	thread;
 	int			id;
 	long		last_meal_timestamp;
-	bool		full;
+	bool		is_full;
 	bool		is_dead;
 	int			has_eaten_times;
+	int			must_eat_times;
 	t_fork		*first_fork;
 	t_fork		*second_fork;
 	t_data		*data;
+	pthread_mutex_t	lock;
 }	t_philo;
 
 struct s_data
@@ -50,15 +52,18 @@ struct s_data
 	int		eat_time;
 	int		sleep_time;
 	int		must_eat_times;
-	int		start_timestamp;
+	size_t	start_timestamp;
+	bool	all_threads_exist;
 	bool	the_end;
 	t_fork	*forks;
 	t_philo	*philos;
+	pthread_mutex_t	print_lock;
 };
 
 long	ft_atol(const char *str);
 void	destroy_mutexes_and_free(t_data le_diner);
-size_t	get_time_in_ms(void);
+size_t	get_time_in_milliseconds(void);
+size_t	ft_usleep(size_t milliseconds);
 
 
 bool	args_are_ok(char **argv);

@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 10:31:05 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/03/08 14:42:01 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/03/14 13:01:36 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,22 +53,24 @@ void	assign_forks(t_philo *res, t_data diner, int i)
 	}
 }
 
-t_philo	*init_philos(t_data diner)
+t_philo	*init_philos(t_data *diner)
 {
 	t_philo	*res;
 	int		i;
 
 	i = -1;
-	res = malloc(sizeof(t_philo) * diner.philo_nb);
+	res = malloc(sizeof(t_philo) * diner->philo_nb);
 	if (!res)
 		return (NULL);
-	while (++i < diner.philo_nb)
+	while (++i < diner->philo_nb)
 	{
 		res[i].id = i + 1;
-		res[i].full = false;
+		res[i].is_full = false;
+		res[i].is_dead = false;
+		res[i].must_eat_times = diner->must_eat_times;
 		res[i].has_eaten_times = 0;
-		assign_forks(res, diner, i);
-		res[i].data = &diner;
+		assign_forks(res, *diner, i);
+		res[i].data = diner;
 	}
 	return (res);
 }
@@ -83,8 +85,10 @@ t_data	init_diner(char **argv)
 	res.sleep_time = (int)ft_atol(argv[4]);
 	if (argv[5])
 		res.must_eat_times = (int)ft_atol(argv[5]);
+	res.all_threads_exist = false;
 	res.the_end = false;
 	res.forks = init_forks(res.philo_nb);
-	res.philos = init_philos(res);
+	res.philos = init_philos(&res);
+	res.start_timestamp = get_time_in_milliseconds();
 	return (res);
 }

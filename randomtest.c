@@ -1,18 +1,12 @@
 
 #include "philo.h"
 
-size_t	get_time_in_ms(void)
-{
-	struct timeval	time;
-
-	if (gettimeofday(&time, NULL) == -1)
-		printf("Erreur gettimeofday\n");
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-}
-
 int main(void)
 {
-	int t = get_time_in_ms();
-	printf("%d\n", t);
+	size_t start = timestp();
+	printf("%zu\n", start);
+	sleep(5);
+	printf("%zu\n", start);
+	
 	return (0);
 }

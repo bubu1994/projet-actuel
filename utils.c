@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 10:45:11 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/03/14 10:38:44 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/03/15 09:43:55 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,11 @@ size_t	ft_usleep(size_t milliseconds)
 	while ((get_time_in_milliseconds() - start < milliseconds))
 		usleep(500);
 	return (0);
+}
+
+size_t	timestp(t_philo *filo)
+{
+	return (get_time_in_milliseconds() - filo->data->start_timestamp);
 }
 
 void	destroy_mutexes_and_free(t_data le_diner)

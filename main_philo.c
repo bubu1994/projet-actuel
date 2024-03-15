@@ -6,93 +6,60 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 10:36:01 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/03/14 12:56:40 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/03/15 11:19:00 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	print_data(t_data diner)
-{
-	int		i;
-	t_philo filo;
-
-	i = 0;
-	while (i < diner.philo_nb)
-	{
-		filo = diner.philos[i];
-		printf("philo %d, l: %d, r: %d\n", filo.id, filo.first_fork->id_fork, filo.second_fork->id_fork);
-		i++;
-	}
-}
-
 /*(takes forks), eats, sleeps, thinks
 repeat*/
-size_t	timestp(t_philo *filo)
+
+void	check_fullness(t_philo *filos)
 {
-	return (get_time_in_milliseconds() - filo->data->start_timestamp);
+	int		i;
+	bool	one_isnot_full;
+
+	i = 0;
+	one_isnot_full = false;
+	while (i < filos->data->philo_nb)
+	{
+		if (filos[i].is_full == false)
+			one_isnot_full = true;
+		i++;
+	}
+	if (one_isnot_full == false)
+		filos->data->the_end = true;
 }
 
-void	print_action(t_philo *filo, char *s)
+void	*monitoring(void *arg)
 {
-	pthread_mutex_lock(&filo->data->print_lock);
-	printf("%zu %d %s", timestp(filo), filo->id, s);
-	pthread_mutex_unlock(&filo->data->print_lock);
-}
+	t_philo	*filos;
 
-static void	eats(t_philo *filo)
-{
-	pthread_mutex_lock(&filo->first_fork->fork);
-	printf("%zu %d has taken fork %d\n",
-		timestp(filo), filo->id, filo->first_fork->id_fork);
-	pthread_mutex_lock(&filo->second_fork->fork);
-	printf("%zu %d has taken fork %d\n",
-		timestp(filo),filo->id, filo->second_fork->id_fork);
-	printf("%zu %d is eating\n",
-		timestp(filo), filo->id);
-	ft_usleep(filo->data->eat_time);
-	pthread_mutex_lock(&filo->lock);
-	filo->has_eaten_times++;
-	filo->last_meal_timestamp = timestp(filo);
-	if (filo->has_eaten_times == filo->must_eat_times)
-		filo->is_full = true;
-	pthread_mutex_unlock(&filo->lock);
-	pthread_mutex_unlock(&filo->first_fork->fork);
-	pthread_mutex_unlock(&filo->second_fork->fork);
-}
-
-void	sleeps(t_philo *filo)
-{
-	print_action(filo, "is sleeping\n");
-	ft_usleep(filo->data->sleep_time);
-}
-
-void	thinks(t_philo *filo)
-{
-	print_action(filo, "is thinking\n");
-}
-
-void	*routine(void *arg)
-{
-	t_philo		*filo;
-
-	filo = (t_philo *)arg;
+	filos = (t_philo *)arg;
 	while (1)
 	{
-		eats(filo);
-		sleeps(filo);
-		thinks(filo);
+		check_fullness(filos);
+		if (filos->data->the_end)
+			break;
 	}
 	return (NULL);
 }
 
 void	dining(t_data diner)
 {
-	int		i;
+	pthread_t	monitor;
 	t_philo	*les_philos;
 	int		status;
+	int		i;
 
 	les_philos = diner.philos;
+	status = pthread_create(&monitor, NULL, monitoring, (void *)les_philos);
+	if (status != 0)
+	{
+		printf("Erreur creation thread/monitor\n");
+		return ;
+	}
 	i = -1;
 	while (++i < diner.philo_nb)
 	{
@@ -102,6 +69,12 @@ void	dining(t_data diner)
 			printf("Erreur creation thread/philo %d\n", i + 1);
 			return ;
 		}
+	}
+	status = pthread_join(monitor, NULL);
+	if (status != 0)
+	{
+		printf("Erreur attente thread/monitor\n");
+		return ;
 	}
 	i = -1;
 	while (++i < diner.philo_nb)

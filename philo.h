@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 10:37:10 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/03/14 12:56:03 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/03/15 11:07:18 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,11 @@ long	ft_atol(const char *str);
 void	destroy_mutexes_and_free(t_data le_diner);
 size_t	get_time_in_milliseconds(void);
 size_t	ft_usleep(size_t milliseconds);
-
+size_t	timestp(t_philo *filo);
 
 bool	args_are_ok(char **argv);
 t_data	init_diner(char **argv);
-
+void	*routine(void *arg);
 
 
 #endif

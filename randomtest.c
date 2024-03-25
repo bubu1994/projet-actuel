@@ -3,10 +3,7 @@
 
 int main(void)
 {
-	size_t start = timestp();
-	printf("%zu\n", start);
-	sleep(5);
-	printf("%zu\n", start);
-	
+	sleep_and_may_die(200, NULL);
+
 	return (0);
 }

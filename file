@@ -1,0 +1,78 @@
+1 1 has taken a fork
+1 1 has taken a fork
+1 1 is eating
+1 2 has taken a fork
+1 4 has taken a fork
+1 4 has taken a fork
+1 4 is eating
+101 4 is sleeping
+101 5 has taken a fork
+101 5 has taken a fork
+101 5 is eating
+101 1 is sleeping
+101 2 has taken a fork
+101 2 is eating
+201 1 is thinking
+201 2 is sleeping
+201 3 has taken a fork
+201 3 has taken a fork
+201 3 is eating
+201 4 is thinking
+201 5 is sleeping
+202 1 has taken a fork
+202 1 has taken a fork
+202 1 is eating
+202 4 has taken a fork
+301 5 is thinking
+301 3 is sleeping
+301 4 has taken a fork
+301 4 is eating
+301 2 is thinking
+302 1 is sleeping
+302 2 has taken a fork
+302 2 has taken a fork
+302 2 is eating
+401 3 is thinking
+401 4 is sleeping
+401 5 has taken a fork
+401 5 has taken a fork
+401 5 is eating
+402 1 is thinking
+402 3 has taken a fork
+402 3 has taken a fork
+402 3 is eating
+402 2 is sleeping
+501 5 is sleeping
+501 4 is thinking
+501 1 has taken a fork
+501 1 has taken a fork
+501 1 is eating
+502 3 is sleeping
+502 4 has taken a fork
+502 4 has taken a fork
+502 4 is eating
+502 2 is thinking
+503 2 has taken a fork
+601 5 is thinking
+601 1 is sleeping
+601 2 has taken a fork
+601 2 is eating
+602 3 is thinking
+602 4 is sleeping
+602 5 has taken a fork
+602 5 has taken a fork
+602 5 is eating
+701 1 is thinking
+701 2 is sleeping
+701 3 has taken a fork
+701 3 has taken a fork
+701 3 is eating
+702 4 is thinking
+702 1 has taken a fork
+702 1 has taken a fork
+702 1 is eating
+702 5 is sleeping
+703 4 has taken a fork
+801 4 has taken a fork
+801 4 is eating
+901 All philos are full

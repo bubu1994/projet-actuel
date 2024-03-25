@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 10:36:01 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/03/15 11:19:00 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/03/25 13:54:39 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*(takes forks), eats, sleeps, thinks
 repeat*/
 
-void	check_fullness(t_philo *filos)
+void	check_filos(t_philo *filos)
 {
 	int		i;
 	bool	one_isnot_full;
@@ -29,7 +29,7 @@ void	check_fullness(t_philo *filos)
 		i++;
 	}
 	if (one_isnot_full == false)
-		filos->data->the_end = true;
+		set_bool(&filos->data->full_lock, &filos->data->all_full, true);
 }
 
 void	*monitoring(void *arg)
@@ -39,58 +39,35 @@ void	*monitoring(void *arg)
 	filos = (t_philo *)arg;
 	while (1)
 	{
-		check_fullness(filos);
-		if (filos->data->the_end)
-			break;
+		check_filos(filos);
+		if (filos->data->all_full || filos->data->one_died)
+			break ;
 	}
 	return (NULL);
 }
 
-void	dining(t_data diner)
+void	dining(t_data *diner)
 {
 	pthread_t	monitor;
 	t_philo	*les_philos;
-	int		status;
 	int		i;
 
-	les_philos = diner.philos;
-	status = pthread_create(&monitor, NULL, monitoring, (void *)les_philos);
-	if (status != 0)
-	{
-		printf("Erreur creation thread/monitor\n");
-		return ;
-	}
+	les_philos = diner->philos;
+	status_check(pthread_create(&monitor, NULL, monitoring, (void *)les_philos));
 	i = -1;
-	while (++i < diner.philo_nb)
-	{
-		status = pthread_create(&les_philos[i].thread, NULL, routine, (void *)&les_philos[i]);
-		if (status != 0)
-		{
-			printf("Erreur creation thread/philo %d\n", i + 1);
-			return ;
-		}
-	}
-	status = pthread_join(monitor, NULL);
-	if (status != 0)
-	{
-		printf("Erreur attente thread/monitor\n");
-		return ;
-	}
+	while (++i < diner->philo_nb)
+		status_check(pthread_create(&les_philos[i].thread, NULL, routine, (void *)&les_philos[i]));
+	set_bool(&diner->begin_lock, &diner->all_ready, true);
+	diner->start_timestamp = get_time_in_milliseconds();
+	status_check(pthread_join(monitor, NULL));
 	i = -1;
-	while (++i < diner.philo_nb)
-	{
-		status = pthread_join(les_philos[i].thread, NULL);
-		if (status != 0)
-		{
-			printf("Erreur attente du thread/philo %d\n", i + 1);
-			return ;
-		}
-	}
+	while (++i < diner->philo_nb)
+		status_check(pthread_join(les_philos[i].thread, NULL));
 }
 
 int	main(int argc, char **argv)
 {
-	t_data	le_diner;
+	t_data	*le_diner;
 
 	if (argc < 5 || argc > 6 || args_are_ok(argv + 1) == false
 		|| ft_atol(argv[1]) < 1)
@@ -100,6 +77,12 @@ int	main(int argc, char **argv)
 	}
 	le_diner = init_diner(argv);
 	dining(le_diner);
+	if (le_diner->all_full)
+		printf("%zu All philos are full\n", timestp(le_diner));
 	destroy_mutexes_and_free(le_diner);
 	return (0);
 }
+
+/*
+Des qu'une variable peut etre changee ou LUE par plusieurs threads, il faut lock
+*/

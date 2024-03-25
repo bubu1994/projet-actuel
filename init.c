@@ -6,7 +6,7 @@
 /*   By: gebuqaj <gebuqaj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 10:31:05 by gebuqaj           #+#    #+#             */
-/*   Updated: 2024/03/14 13:01:36 by gebuqaj          ###   ########.fr       */
+/*   Updated: 2024/03/25 13:19:41 by gebuqaj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,26 +69,38 @@ t_philo	*init_philos(t_data *diner)
 		res[i].is_dead = false;
 		res[i].must_eat_times = diner->must_eat_times;
 		res[i].has_eaten_times = 0;
+		res[i].last_meal_timestamp = diner->start_timestamp;
 		assign_forks(res, *diner, i);
 		res[i].data = diner;
+		pthread_mutex_init(&res[i].eat_lock, NULL);
 	}
 	return (res);
 }
 
-t_data	init_diner(char **argv)
+t_data	*init_diner(char **argv)
 {
-	t_data	res;
+	t_data	*res;
 
-	res.philo_nb = (int)ft_atol(argv[1]);
-	res.die_time = (int)ft_atol(argv[2]);
-	res.eat_time = (int)ft_atol(argv[3]);
-	res.sleep_time = (int)ft_atol(argv[4]);
+	res = malloc(sizeof(t_data));
+	if (!res)
+		return (NULL);
+	res->philo_nb = (int)ft_atol(argv[1]);
+	res->die_time = (int)ft_atol(argv[2]);
+	res->eat_time = (int)ft_atol(argv[3]);
+	res->sleep_time = (int)ft_atol(argv[4]);
 	if (argv[5])
-		res.must_eat_times = (int)ft_atol(argv[5]);
-	res.all_threads_exist = false;
-	res.the_end = false;
-	res.forks = init_forks(res.philo_nb);
-	res.philos = init_philos(&res);
-	res.start_timestamp = get_time_in_milliseconds();
+		res->must_eat_times = (int)ft_atol(argv[5]);
+	else
+		res->must_eat_times = -41;
+	res->all_full = false;
+	res->one_died = false;
+	res->all_ready = false;
+	res->forks = init_forks(res->philo_nb);
+	res->philos = init_philos(res);
+	res->start_timestamp = get_time_in_milliseconds();
+	pthread_mutex_init(&res->begin_lock, NULL);
+	pthread_mutex_init(&res->print_lock, NULL);
+	pthread_mutex_init(&res->full_lock, NULL);
+	pthread_mutex_init(&res->dead_lock, NULL);
 	return (res);
 }
